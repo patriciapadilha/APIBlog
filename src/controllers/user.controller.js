@@ -7,11 +7,17 @@ const createUser = async (req, res) => {
     res.status(result.sucess.code).json({ token: result.sucess.token }); 
   } catch (err) {
     const [code, message] = err.message.split('|');
-    
+
     return res.status(code).json({ message });
   }
 };
 
+const getAllUsers = async (req, res) => {
+  const result = await userService.getAllUsers();
+  return res.status(200).json(result);
+};
+
 module.exports = {
     createUser,
+    getAllUsers,
 };

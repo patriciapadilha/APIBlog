@@ -1,6 +1,6 @@
 const Joi = require('joi');
 const { User } = require('../database/models');
-const jwtService = require('./jwt.service');
+const jwtMiddlewares = require('../middlewares/jwt');
 
 const validateBody = (data) => {
   const schema = Joi.object({
@@ -35,11 +35,17 @@ const createUser = async ({ displayName, email, password, image }) => {
 
   await User.create({ displayName, email, password, image });
 
-  const token = jwtService.createToken(email);
+  const token = jwtMiddlewares.createToken(email);
 
   return { sucess: { code: 201, token } };
 };
 
+const getAllUsers = async () => {
+  const result = await User.findAll();
+  return result;
+};
+
 module.exports = {
     createUser,
+    getAllUsers,
 };

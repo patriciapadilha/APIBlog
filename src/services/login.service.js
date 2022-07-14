@@ -1,5 +1,5 @@
 const { User } = require('../database/models');
-const jwtService = require('./jwt.service');
+const jwtMiddlewares = require('../middlewares/jwt');
 
 const userLogin = async ({ email, password }) => {
   if (!email || !password) {
@@ -12,7 +12,7 @@ const userLogin = async ({ email, password }) => {
     return { error: { code: 400, message: 'Invalid fields' } };
   }
 
-  const token = jwtService.createToken(email);
+  const token = jwtMiddlewares.createToken(email);
 
   return { sucess: { code: 200, token } };
 };
