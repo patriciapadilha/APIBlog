@@ -1,4 +1,5 @@
 const postService = require('../services/post.service');
+const { PostCategory } = require('../database/models');
 
 const createPost = async (req, res) => {
     const { title, content, categoryIds } = req.body;
@@ -9,6 +10,8 @@ const createPost = async (req, res) => {
       if (!result) {
         return res.status(400).json({ message: '"categoryIds" not found' });
       }
+      await Promise.all(categoryIds
+        .map((id) => PostCategory.create({ postId: result.dataValues.id, categoryId: id })));
       
       res.status(201).json(result);  
     } catch (err) {
