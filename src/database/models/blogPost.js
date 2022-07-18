@@ -28,7 +28,7 @@ const blogPostSchema = (sequelize, DataTypes) => {
   blogPostTable.associate = models => {
     blogPostTable.belongsTo(models.User, {
         foreignKey: 'userId',
-        as: 'Users'
+        as: 'user'
     })
   }
 
