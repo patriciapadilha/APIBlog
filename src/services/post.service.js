@@ -71,7 +71,7 @@ const getPostById = async (id) => {
 const updatePost = async ({ id, title, content, userEmail }) => {
     const user = await User.findOne({ where: { email: userEmail } });
     const posts = await getPostById(id);
-    console.log(user.id, posts.userId);
+    
     if (user.id !== posts.userId) throw new Error('401|Unauthorized user');
   
     await BlogPost.update({ title, content }, { where: { id } });
@@ -81,9 +81,20 @@ const updatePost = async ({ id, title, content, userEmail }) => {
     return updatedPost;
 };
 
+const deletePost = async ({ id, userEmail }) => {
+  const user = await User.findOne({ where: { email: userEmail } });
+    const posts = await getPostById(id);
+
+    if (!posts) throw new Error('404|Post does not exist');
+
+    if (user.id !== posts.userId) throw new Error('401|Unauthorized user');
+    await BlogPost.destroy({ where: { id } });
+};
+
 module.exports = {
   createPost,
   getAllPosts,
   getPostById,
   updatePost,
+  deletePost,
 };
