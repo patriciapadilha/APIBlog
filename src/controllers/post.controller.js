@@ -38,8 +38,28 @@ const getPostById = async (req, res) => {
   res.status(200).json(result); 
 };
 
+const updatePost = async (req, res) => {
+  const { id } = req.params;
+  const { title, content } = req.body;
+  const { data } = req.user;
+
+  try {
+    if (!title || !content) {
+      return res.status(400).json({ message: 'Some required fields are missing' });
+    }
+    const result = await postService.updatePost({ id, title, content, userEmail: data });
+  
+    res.status(200).json(result); 
+  } catch (err) {
+    const [code, message] = err.message.split('|');
+
+    return res.status(code).json({ message });
+  }
+};
+
 module.exports = {
     createPost,
     getAllPosts,
     getPostById,
+    updatePost,
 };

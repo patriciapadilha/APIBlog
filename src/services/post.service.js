@@ -30,7 +30,6 @@ const createPost = async ({ title, content, userEmail, categoryIds }) => {
 
   try {
     if (await validateCategories(categoryIds) || categoryIds.length < 1) {
-      // throw new Error('400|Some required fields are missing');
       return null;
     }
    
@@ -69,8 +68,22 @@ const getPostById = async (id) => {
   return post;
 };
 
+const updatePost = async ({ id, title, content, userEmail }) => {
+    const user = await User.findOne({ where: { email: userEmail } });
+    const posts = await getPostById(id);
+    console.log(user.id, posts.userId);
+    if (user.id !== posts.userId) throw new Error('401|Unauthorized user');
+  
+    await BlogPost.update({ title, content }, { where: { id } });
+  
+    const updatedPost = await getPostById(id);
+  
+    return updatedPost;
+};
+
 module.exports = {
   createPost,
   getAllPosts,
   getPostById,
+  updatePost,
 };
