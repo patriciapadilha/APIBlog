@@ -55,8 +55,17 @@ const getUserById = async (id) => {
   return result;
 };
 
+const deleteUser = async ({ id, tokenInfos }) => {
+  const user = await User.findOne({ where: { email: tokenInfos } });
+  
+    if (user.id === id) {
+      await User.destroy({ where: { id } });
+    }
+};
+
 module.exports = {
     createUser,
     getAllUsers,
     getUserById,
+    deleteUser,
 };
