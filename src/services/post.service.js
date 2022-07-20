@@ -91,10 +91,27 @@ const deletePost = async ({ id, userEmail }) => {
     await BlogPost.destroy({ where: { id } });
 };
 
+const searchPost = async (query) => {
+  const result = await BlogPost.findAll({ 
+    where: { 
+      [Op.or]: [
+        { title: { [Op.like]: `%${query}%` } },
+        { content: { [Op.like]: `%${query}%` } },
+      ],
+    },
+    include: [
+      { model: User, as: 'user', attributes: { exclude: ['password'] } },
+      { model: Category, as: 'categories', through: { attributes: [] } },
+    ],
+  });
+  return result;
+};
+
 module.exports = {
   createPost,
   getAllPosts,
   getPostById,
   updatePost,
   deletePost,
+  searchPost,
 };
