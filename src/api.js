@@ -14,6 +14,5 @@ app.use('/user', userRouter);
 app.use('/categories', categoryRouter);
 app.use('/post', postRouter);
 
-// É importante exportar a constante `app`,
-// para que possa ser utilizada pelo arquivo `src/server.js`
+
 module.exports = app;
